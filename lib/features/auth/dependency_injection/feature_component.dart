@@ -1,5 +1,6 @@
 import 'package:flutter_demo/dependency_injection/app_component.dart';
 import 'package:flutter_demo/features/auth/domain/use_cases/log_in_use_case.dart';
+import 'package:flutter_demo/features/auth/domain/use_cases/validate_credentials_use_case.dart';
 import 'package:flutter_demo/features/auth/login/login_initial_params.dart';
 import 'package:flutter_demo/features/auth/login/login_navigator.dart';
 import 'package:flutter_demo/features/auth/login/login_page.dart';
@@ -44,6 +45,9 @@ void _configureStores() {
 void _configureUseCases() {
   // ignore: unnecessary_statements
   getIt
+        ..registerFactory<ValidateCredentialsUseCase>(
+          () => const ValidateCredentialsUseCase(),
+        )
         ..registerFactory<LogInUseCase>(
           () => LogInUseCase(
             getIt(),
@@ -67,6 +71,7 @@ void _configureMvp() {
         ..registerFactoryParam<LoginPresenter, LoginInitialParams, dynamic>(
           (initialParams, _) => LoginPresenter(
             getIt(param1: initialParams),
+            getIt(),
             getIt(),
           ),
         )
