@@ -12,24 +12,24 @@ class LoginPresentationModel implements LoginViewModel {
     LoginInitialParams initialParams,
   )   : username = '',
         password = '',
-        loginResult = const FutureResult.empty(),
-        _isLoginEnabled = false;
+        isLoginEnabledInternal = false,
+        loginResult = const FutureResult.empty();
 
   /// Used for the copyWith method
-  LoginPresentationModel._(
-    this.username,
-    this.password,
-    this.loginResult,
-    this._isLoginEnabled,
-  );
+  LoginPresentationModel._({
+    required this.username,
+    required this.password,
+    required this.isLoginEnabledInternal,
+    required this.loginResult,
+  });
 
   final String username;
   final String password;
+  final bool isLoginEnabledInternal;
   final FutureResult<Either<LogInFailure, User>> loginResult;
-  final bool _isLoginEnabled;
 
   @override
-  bool get isLoginEnabled => _isLoginEnabled;
+  bool get isLoginEnabled => isLoginEnabledInternal;
 
   @override
   bool get isLoading => loginResult.isPending();
@@ -37,14 +37,14 @@ class LoginPresentationModel implements LoginViewModel {
   LoginPresentationModel copyWith({
     String? username,
     String? password,
-    FutureResult<Either<LogInFailure, User>>? loginResult,
     bool? isLoginEnabled,
+    FutureResult<Either<LogInFailure, User>>? loginResult,
   }) {
     return LoginPresentationModel._(
-      username ?? this.username,
-      password ?? this.password,
-      loginResult ?? this.loginResult,
-      isLoginEnabled ?? _isLoginEnabled,
+      username: username ?? this.username,
+      password: password ?? this.password,
+      isLoginEnabledInternal: isLoginEnabled ?? isLoginEnabledInternal,
+      loginResult: loginResult ?? this.loginResult,
     );
   }
 }
