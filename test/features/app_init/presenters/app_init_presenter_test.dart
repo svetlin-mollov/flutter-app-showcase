@@ -27,6 +27,7 @@ void main() {
         Stream.fromIterable([const User.anonymous()]),
       );
       when(() => AppInitMocks.appInitUseCase.execute()).thenAnswer((_) => successFuture(unit));
+      when(() => navigator.openLogin(any())).thenAnswer((_) => Future.value());
 
       // WHEN
       await presenter.onInit();
@@ -52,6 +53,25 @@ void main() {
 
       // THEN
       verify(() => navigator.showError(any()));
+    },
+  );
+
+  test(
+    'should open login when appInitUseCase succeeds',
+    () async {
+      // GIVEN
+      whenListen(
+        Mocks.userStore,
+        Stream.fromIterable([const User.anonymous()]),
+      );
+      when(() => AppInitMocks.appInitUseCase.execute()).thenAnswer((_) => failFuture(const AppInitFailure.unknown()));
+      when(() => navigator.openLogin(any())).thenAnswer((_) => Future.value());
+
+      // WHEN
+      await presenter.onInit();
+
+      // THEN
+      verify(() => navigator.openLogin(any()));
     },
   );
 
